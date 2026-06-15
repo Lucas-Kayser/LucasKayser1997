@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 لوحة التحكم – الكنيسة الإنجيلية</title>
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/NgKMPBgm/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>window.scrollTo(0,0); history.scrollRestoration='manual';</script>
+    <style>
+        :root {
+            --bg-body: #f3f4f6;
+            --bg-card: rgba(255,255,255,0.92);
+            --card-border: rgba(255,255,255,0.7);
+            --text-main: #1f2937;
+            --text-sub: #4b5563;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --title-select: #4b5563;
+        }
+        html.dark {
+            --bg-body: #080c14;
+            --bg-card: rgba(17,24,39,0.88);
+            --card-border: rgba(255,255,255,0.06);
+            --text-main: #f9fafb;
+            --text-sub: #9ca3af;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --title-select: #9ca3af;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-x: hidden; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-body);
+            min-height: 100vh;
+            color: var(--text-main);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* ═══════════════════════════════════════
+           LOGIN PAGE
+        ═══════════════════════════════════════ */
+        #login-page {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c084fc 100%);
+            position: relative; overflow: hidden;
+        }
+        #login-page::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%);
+        }
+
+        /* جسيمات خلفية */
+        .bg-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            animation: floatBubble linear infinite;
+            pointer-events: none;
+        }
+        @keyframes floatBubble {
+            0%   { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 0.6; }
+            100% { transform: translateY(-120px) scale(1.1); opacity: 0; }
+        }
+
+        .login-card {
+            background: rgba(255,255,255,0.13);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 30px;
+            padding: 2.8rem 2.4rem;
+            width: 380px;
+            max-width: calc(100vw - 40px);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+            position: relative; z-index: 1;
+            text-align: center;
+            animation: cardPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        @keyframes cardPop {
+            from { transform: scale(0.85) translateY(30px); opacity: 0; }
+            to   { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .login-logo {
+            width: 90px; height: 90px; border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.5);
+            display: block; margin: 0 auto 1.4rem;
+            object-fit: cover;
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        }
+        .login-card h1 {
+            color: #fff; font-size: 1.55rem; font-weight: 900;
+            margin-bottom: 4px;
+        }
+        .login-card .subtitle {
+            color: rgba(255,255,255,0.68); font-size: 0.88rem; margin-bottom: 2rem;
+        }
+
+        /* Admin badge */
+        .admin-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.28);
+            color: #fff; padding: 4px 16px;
+            border-radius: 30px; font-size: 0.78rem; font-weight: 700;
+            margin-bottom: 1.8rem;
+        }
+
+        /* Password field */
+        .pw-group { position: relative; margin-bottom: 1.2rem; }
+        .pw-group input {
+            width: 100%; padding: 14px 50px 14px 18px;
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.3);
+            border-radius: 16px; color: #fff;
+            font-size: 1.05rem; font-family: 'Tajawal', sans-serif;
+            letter-spacing: 2px;
+            transition: border 0.25s, background 0.25s;
+            direction: ltr; text-align: center;
+        }
+        .pw-group input::placeholder {
+            color: rgba(255,255,255,0.45); letter-spacing: 0; font-size: 0.9rem;
+        }
+        .pw-group input:focus {
+            outline: none;
+            border-color: rgba(255,255,255,0.75);
+            background: rgba(255,255,255,0.22);
+        }
+        .pw-eye {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; color: rgba(255,255,255,0.6);
+            cursor: pointer; font-size: 1.1rem; padding: 4px;
+            transition: color 0.2s;
+        }
+        .pw-eye:hover { color: #fff; }
+
+        .btn-login {
+            width: 100%; padding: 14px;
+            background: rgba(255,255,255,0.22);
+            border: 1.5px solid rgba(255,255,255,0.5);
+            border-radius: 30px; color: #fff;
+            font-size: 1.05rem; font-weight: 700;
+            cursor: pointer; font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+        }
+        .btn-login:hover { background: rgba(255,255,255,0.36); transform: scale(1.02); }
+        .btn-login:active { transform: scale(0.97); }
+
+        .error-msg {
+            background: rgba(239,68,68,0.28);
+            border: 1px solid rgba(239,68,68,0.5);
+            color: #fca5a5; border-radius: 12px;
+            padding: 10px 14px; font-size: 0.85rem;
+            margin-bottom: 1rem; display: none; text-align: center;
+            animation: shake 0.35s ease;
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%,60%  { transform: translateX(-8px); }
+            40%,80%  { transform: translateX(8px); }
+        }
+        .login-hint {
+            color: rgba(255,255,255,0.42); font-size: 0.76rem; margin-top: 1.2rem;
+        }
+
+        /* ═══════════════════════════════════════
+           CONTROL PANEL PAGE
+        ═══════════════════════════════════════ */
+        #panel-page { display: none; min-height: 100vh; }
+
+        /* Hero header */
+        .hero-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c084fc 100%);
+            text-align: center;
+            padding: 50px 20px 120px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative; overflow: hidden;
+        }
+        .header-controls {
+            position: absolute; top: 22px; right: 22px;
+            display: flex; gap: 10px; align-items: center; z-index: 10;
+        }
+        .hbtn {
+            background: rgba(255,255,255,0.18); color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            border-radius: 25px; padding: 7px 16px;
+            font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; font-family: 'Tajawal', sans-serif;
+            text-decoration: none; transition: background 0.2s;
+        }
+        .hbtn:hover { background: rgba(255,255,255,0.3); }
+
+        .theme-toggle-switch {
+            width: 76px; height: 36px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px; border: 1.5px solid rgba(255,255,255,0.4);
+            position: relative; cursor: pointer;
+            display: flex; align-items: center;
+            justify-content: space-between; padding: 0 8px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .theme-toggle-switch .switch-icon { font-size: 1rem; user-select: none; }
+        .theme-toggle-switch .switch-handle {
+            position: absolute; top: 3px; right: 3px;
+            width: 27px; height: 27px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        html.dark .theme-toggle-switch { background: rgba(17,24,39,0.6); }
+        html.dark .theme-toggle-switch .switch-handle { transform: translateX(-40px); background: #38bdf8; }
+
+        .hero-header h1 { color: #fff; font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; }
+        .hero-header .hero-sub { color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+        .hero-badge {
+            display: inline-block; margin-top: 14px;
+            background: rgba(255,255,255,0.17); color: #fff;
+            padding: 5px 22px; border-radius: 25px;
+            font-size: 0.84rem; font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .section-title {
+            text-align: center;
+            margin: -38px auto 28px;
+            font-size: 1.1rem; font-weight: 700;
+            color: var(--title-select);
+            position: relative; z-index: 5;
+            background: var(--bg-body); padding: 6px 22px;
+            display: inline-block;
+            left: 50%; transform: translateX(-50%);
+            border-radius: 30px;
+        }
+
+        .page-body {
+            max-width: 920px;
+            margin: 0 auto 70px;
+            padding: 0 20px;
+            position: relative; z-index: 2;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 28px; overflow: hidden;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--card-border);
+            margin-bottom: 26px;
+            transition: transform 0.3s cubic-bezier(0.25,1,0.5,1), box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px) scale(1.005);
+            box-shadow: 0 20px 40px rgba(99,102,241,0.13);
+        }
+
+        .card-head {
+            padding: 20px 24px; color: #fff;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.05rem; font-weight: 700;
+        }
+        .card-head .ico { font-size: 1.4rem; }
+        .card-purple .card-head { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+        .card-blue   .card-head { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); }
+        .card-rose   .card-head { background: linear-gradient(135deg, #be185d 0%, #ec4899 100%); }
+        .card-green  .card-head { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
+        .card-orange .card-head { background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%); }
+
+        .card-body { padding: 24px; }
+
+        /* Stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px; margin-bottom: 26px;
+        }
+        .stat-box {
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            padding: 20px 16px; text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .stat-box:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(99,102,241,0.12); }
+        .stat-box .stat-num { font-size: 2rem; font-weight: 900; }
+        .stat-box .stat-label { font-size: 0.78rem; color: var(--text-sub); font-weight: 600; margin-top: 4px; }
+        .stat-purple .stat-num { color: #7c3aed; }
+        .stat-blue   .stat-num { color: #2563eb; }
+        .stat-green  .stat-num { color: #059669; }
+        .stat-rose   .stat-num { color: #be185d; }
+
+        /* Users table */
+        .users-table { width: 100%; border-collapse: collapse; }
+        .users-table th {
+            text-align: right; padding: 12px 14px;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--text-sub);
+            border-bottom: 2px solid rgba(109,40,217,0.1);
+        }
+        .users-table td {
+            padding: 14px 14px;
+            font-size: 0.88rem;
+            border-bottom: 1px solid rgba(109,40,217,0.06);
+            vertical-align: middle;
+        }
+        .users-table tr:last-child td { border-bottom: none; }
+        .users-table tr:hover td { background: rgba(124,58,237,0.04); }
+
+        /* Status badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 700;
+        }
+        .badge-active  { background: #d1fae5; color: #065f46; }
+        .badge-off     { background: #fee2e2; color: #991b1b; }
+        html.dark .badge-active { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+        html.dark .badge-off    { background: rgba(239,68,68,0.2);  color: #fca5a5; }
+
+        /* Action buttons */
+        .btn-icon {
+            background: none; border: none; cursor: pointer;
+            font-size: 1.1rem; padding: 5px 7px;
+            border-radius: 10px; transition: background 0.2s, transform 0.15s;
+        }
+        .btn-icon:hover { background: rgba(109,40,217,0.1); transform: scale(1.15); }
+        .btn-icon.del:hover { background: rgba(239,68,68,0.1); }
+
+        /* Add user form */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media(max-width:560px){ .form-row { grid-template-columns: 1fr; } }
+
+        .field { margin-bottom: 14px; }
+        .field label {
+            display: block; font-size: 0.83rem; font-weight: 700;
+            color: var(--text-sub); margin-bottom: 7px;
+        }
+        .field input, .field select {
+            width: 100%; padding: 12px 14px;
+            background: var(--bg-body);
+            border: 1.5px solid rgba(109,40,217,0.14);
+            border-radius: 14px; color: var(--text-main);
+            font-size: 0.95rem; font-family: 'Tajawal', sans-serif;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        .field input:focus, .field select:focus {
+            outline: none; border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: #fff; border: none; border-radius: 16px;
+            padding: 13px 28px; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s; margin-top: 6px;
+        }
+        .btn-add:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(124,58,237,0.3); }
+        .btn-add:active { transform: scale(0.97); }
+
+        /* Edit modal */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(6px);
+            z-index: 9998; display: none;
+            align-items: center; justify-content: center;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            border-radius: 28px; padding: 2rem;
+            width: 420px; max-width: calc(100vw - 32px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+            animation: cardPop 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+            position: relative; z-index: 9999;
+        }
+        .modal-title {
+            font-size: 1.15rem; font-weight: 800;
+            margin-bottom: 1.4rem; color: var(--text-main);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .modal-close {
+            position: absolute; top: 18px; left: 18px;
+            background: rgba(109,40,217,0.1); border: none;
+            border-radius: 10px; padding: 5px 10px;
+            font-size: 1rem; cursor: pointer; color: var(--text-sub);
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: #1f2937; color: #fff;
+            padding: 12px 26px; border-radius: 30px;
+            font-size: 0.9rem; font-weight: 600;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            z-index: 99999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        html.dark .toast { background: #e5e7eb; color: #111827; }
+
+        /* Search bar */
+        .search-wrap { position: relative; margin-bottom: 18px; }
+        .search-wrap input {
+            width: 100%; padding: 12px 42px 12px 16px;
+            background: var(--bg-body);
+            border: 1.5px solid rgba(109,40,217,0.14);
+            border-radius: 16px; color: var(--text-main);
+            font-size: 0.92rem; font-family: 'Tajawal', sans-serif;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+        .search-wrap input:focus {
+            outline: none; border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+        }
+        .search-wrap .s-icon {
+            position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 1rem; color: var(--text-sub); pointer-events: none;
+        }
+
+        /* Change password section */
+        .pw-change-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media(max-width:480px){ .pw-change-row { grid-template-columns: 1fr; } }
+
+        /* Scrollable table container */
+        .table-wrap { overflow-x: auto; }
+
+        @media(max-width:600px){
+            .users-table th:nth-child(3),
+            .users-table td:nth-child(3) { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     LOGIN PAGE
+═══════════════════════════════════════ -->
+<div id="login-page">
+
+    <!-- جسيمات خلفية -->
+    <div id="bg-particles"></div>
+
+    <div class="login-card">
+        <img class="login-logo" src="https://i.ibb.co/NgKMPBgm/logo.jpg" alt="الكنيسة">
+        <h1>لوحة التحكم</h1>
+        <p class="subtitle">الكنيسة الإنجيلية</p>
+        <div class="admin-badge">🛡️ وصول المديرين فقط</div>
+
+        <div class="error-msg" id="err-msg">❌ كلمة المرور غلط، حاول تاني</div>
+
+        <div class="pw-group">
+            <input type="password" id="pw-input" placeholder="أدخل كلمة المرور" autocomplete="current-password">
+            <button class="pw-eye" id="pw-eye-btn" onclick="toggleEye()" title="إظهار / إخفاء">👁️</button>
+        </div>
+
+        <button class="btn-login" onclick="doLogin()">🔓 دخول</button>
+        <p class="login-hint">هذه الصفحة للمديرين فقط</p>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     CONTROL PANEL PAGE
+═══════════════════════════════════════ -->
+<div id="panel-page">
+
+    <!-- Hero Header -->
+    <div class="hero-header">
+        <div class="header-controls">
+            <!-- Dark mode toggle -->
+            <div class="theme-toggle-switch" onclick="toggleTheme()" title="تغيير المظهر">
+                <span class="switch-icon">☀️</span>
+                <span class="switch-icon">🌙</span>
+                <div class="switch-handle"></div>
+            </div>
+            <!-- Links -->
+            <a href="index.html" class="hbtn">🏠 الرئيسية</a>
+            <a href="church_booking.html" class="hbtn">📅 الحجوزات</a>
+            <!-- Logout -->
+            <button class="hbtn" onclick="doLogout()">🚪 خروج</button>
+        </div>
+
+        <img src="https://i.ibb.co/NgKMPBgm/logo.jpg" alt="logo"
+             style="width:80px;height:80px;border-radius:50%;border:3px solid rgba(255,255,255,0.5);object-fit:cover;margin-bottom:14px;box-shadow:0 0 24px rgba(255,255,255,0.18);">
+        <h1>⚙️ لوحة التحكم</h1>
+        <p class="hero-sub">إدارة المستخدمين وكلمات المرور</p>
+        <div class="hero-badge">🛡️ أدمن</div>
+    </div>
+
+    <div style="text-align:center;">
+        <div class="section-title">📋 إدارة المستخدمين</div>
+    </div>
+
+    <div class="page-body">
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-num stat-purple" id="stat-total">0</div>
+                <div class="stat-label">إجمالي المستخدمين</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num stat-green" id="stat-active">0</div>
+                <div class="stat-label">مفعّلين</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num stat-rose" id="stat-off">0</div>
+                <div class="stat-label">موقوفين</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-num stat-blue" id="stat-roles">0</div>
+                <div class="stat-label">أدوار مختلفة</div>
+            </div>
+        </div>
+
+        <!-- Users List -->
+        <div class="card card-purple">
+            <div class="card-head"><span class="ico">👥</span> قائمة المستخدمين</div>
+            <div class="card-body">
+                <div class="search-wrap">
+                    <input type="text" id="search-input" placeholder="🔍 ابحث باسم أو دور أو يوزر نيم..." oninput="renderTable()">
+                    <span class="s-icon">🔍</span>
+                </div>
+                <div class="table-wrap">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>يوزر نيم</th>
+                                <th>الحالة</th>
+                                <th>إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add New User -->
+        <div class="card card-green">
+            <div class="card-head"><span class="ico">➕</span> إضافة مستخدم جديد</div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="field">
+                        <label>الاسم الكامل</label>
+                        <input type="text" id="new-name" placeholder="مثال: مينا سمير">
+                    </div>
+                    <div class="field">
+                        <label>اسم المستخدم (يوزر نيم)</label>
+                        <input type="text" id="new-user" placeholder="mina_samir">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="field">
+                        <label>كلمة المرور</label>
+                        <input type="text" id="new-pass" placeholder="اكتب كلمة المرور">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addUser()">➕ إضافة المستخدم</button>
+            </div>
+        </div>
+
+        <!-- Change Admin Password -->
+        <div class="card card-orange">
+            <div class="card-head"><span class="ico">🔑</span> تغيير كلمة مرور الدخول للوحة</div>
+            <div class="card-body">
+                <div class="pw-change-row">
+                    <div class="field">
+                        <label>كلمة المرور الجديدة</label>
+                        <input type="text" id="new-admin-pw" placeholder="اكتب الكلمة الجديدة">
+                    </div>
+                    <div class="field">
+                        <label>تأكيد كلمة المرور</label>
+                        <input type="text" id="confirm-admin-pw" placeholder="اكتب تاني">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="changeAdminPw()" style="background:linear-gradient(135deg,#b45309,#f59e0b);">
+                    🔑 حفظ كلمة المرور الجديدة
+                </button>
+            </div>
+        </div>
+
+    </div><!-- /page-body -->
+</div><!-- /panel-page -->
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-title">✏️ تعديل المستخدم</div>
+        <input type="hidden" id="edit-idx">
+        <div class="field">
+            <label>الاسم الكامل</label>
+            <input type="text" id="edit-name">
+        </div>
+        <div class="field">
+            <label>اسم المستخدم (يوزر نيم)</label>
+            <input type="text" id="edit-user">
+        </div>
+        <div class="field">
+            <label>كلمة المرور</label>
+            <input type="text" id="edit-pass">
+        </div>
+        <div style="display:flex; gap:12px; margin-top:6px;">
+            <button class="btn-add" onclick="saveEdit()" style="flex:1;">💾 حفظ</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════
+   DATA  –  بيانات المستخدمين (localStorage)
+═══════════════════════════════════ */
+const ADMIN_PW_KEY = 'ctrl_admin_pw';
+const USERS_KEY    = 'ctrl_users';
+
+// كلمة المرور الافتراضية
+const DEFAULT_PW = 'Lucas2026';
+
+function getAdminPw() {
+    return localStorage.getItem(ADMIN_PW_KEY) || DEFAULT_PW;
+}
+function getUsers() {
+    const raw = localStorage.getItem(USERS_KEY);
+    if (!raw) return [
+        { name: 'مينا سمير',   username: 'mina',   password: '1234', role: 'مشرف',     active: true },
+        { name: 'مريم فارس',   username: 'mariam', password: 'abcd', role: 'خادم',     active: true },
+        { name: 'بيتر نادر',   username: 'peter',  password: 'pass', role: 'مدير حجز', active: false },
+    ];
+    return JSON.parse(raw);
+}
+function saveUsers(arr) { localStorage.setItem(USERS_KEY, JSON.stringify(arr)); }
+
+/* ═══════════════════════════════════
+   LOGIN
+═══════════════════════════════════ */
+function doLogin() {
+    const val = document.getElementById('pw-input').value.trim();
+    if (val === getAdminPw()) {
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('panel-page').style.display = 'block';
+        renderTable();
+        updateStats();
+        initTheme();
+    } else {
+        const err = document.getElementById('err-msg');
+        err.style.display = 'block';
+        err.style.animation = 'none';
+        setTimeout(() => err.style.animation = '', 10);
+        document.getElementById('pw-input').value = '';
+        document.getElementById('pw-input').focus();
+    }
+}
+
+document.getElementById('pw-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+});
+
+function doLogout() {
+    document.getElementById('panel-page').style.display = 'none';
+    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('err-msg').style.display = 'none';
+}
+
+function toggleEye() {
+    const inp = document.getElementById('pw-input');
+    const btn = document.getElementById('pw-eye-btn');
+    if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+    else                         { inp.type = 'password'; btn.textContent = '👁️'; }
+}
+
+/* ═══════════════════════════════════
+   TABLE
+═══════════════════════════════════ */
+function renderTable() {
+    const q = (document.getElementById('search-input').value || '').toLowerCase();
+    const users = getUsers();
+    const tbody = document.getElementById('users-tbody');
+    const filtered = users.filter(u =>
+        u.name.toLowerCase().includes(q) ||
+        u.username.toLowerCase().includes(q) ||
+        u.role.includes(q)
+    );
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-sub);padding:30px;">لا توجد نتائج</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = filtered.map((u, fi) => {
+        const realIdx = users.indexOf(u);
+        return `
+        <tr>
+            <td><strong>${u.name}</strong></td>
+            <td style="font-family:monospace;color:#7c3aed;">${u.username}</td>
+            <td><span class="badge ${u.active ? 'badge-active' : 'badge-off'}">${u.active ? '✅ مفعّل' : '⛔ موقوف'}</span></td>
+            <td>
+                <button class="btn-icon" onclick="openEdit(${realIdx})" title="تعديل">✏️</button>
+                <button class="btn-icon" onclick="quickToggle(${realIdx})" title="${u.active ? 'إيقاف' : 'تفعيل'}"
+                    style="background:${u.active ? 'rgba(239,68,68,0.08)' : 'rgba(16,185,129,0.08)'};">
+                    ${u.active ? '⛔' : '✅'}
+                </button>
+                <button class="btn-icon del" onclick="deleteUser(${realIdx})" title="حذف">🗑️</button>
+            </td>
+        </tr>`;
+    }).join('');
+    updateStats();
+}
+
+/* ═══════════════════════════════════
+   STATS
+═══════════════════════════════════ */
+function updateStats() {
+    const users = getUsers();
+    const active = users.filter(u => u.active).length;
+    const roles  = [...new Set(users.map(u => u.role))].length;
+    document.getElementById('stat-total').textContent  = users.length;
+    document.getElementById('stat-active').textContent = active;
+    document.getElementById('stat-off').textContent    = users.length - active;
+    document.getElementById('stat-roles').textContent  = roles;
+}
+
+/* ═══════════════════════════════════
+   QUICK TOGGLE (من الجدول مباشرة)
+═══════════════════════════════════ */
+function quickToggle(idx) {
+    const users = getUsers();
+    users[idx].active = !users[idx].active;
+    saveUsers(users);
+    renderTable();
+    showToast(users[idx].active ? '✅ تم تفعيل الحساب' : '⛔ تم إيقاف الحساب');
+}
+
+/* ═══════════════════════════════════
+   ADD USER
+═══════════════════════════════════ */
+function addUser() {
+    const name = document.getElementById('new-name').value.trim();
+    const user = document.getElementById('new-user').value.trim();
+    const pass = document.getElementById('new-pass').value.trim();
+    if (!name || !user || !pass) { showToast('❗ اكمل البيانات الأول'); return; }
+    const users = getUsers();
+    if (users.find(u => u.username === user)) { showToast('⚠️ اليوزر نيم ده موجود'); return; }
+    users.push({ name, username: user, password: pass, role: 'عضو', active: true });
+    saveUsers(users);
+    renderTable();
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-user').value = '';
+    document.getElementById('new-pass').value = '';
+    showToast('✅ تم إضافة المستخدم');
+}
+
+/* ═══════════════════════════════════
+   DELETE
+═══════════════════════════════════ */
+function deleteUser(idx) {
+    if (!confirm('متأكد إنك عايز تحذف المستخدم ده؟')) return;
+    const users = getUsers();
+    users.splice(idx, 1);
+    saveUsers(users);
+    renderTable();
+    showToast('🗑️ تم حذف المستخدم');
+}
+
+/* ═══════════════════════════════════
+   EDIT MODAL
+═══════════════════════════════════ */
+function openEdit(idx) {
+    const users = getUsers();
+    const u = users[idx];
+    document.getElementById('edit-idx').value   = idx;
+    document.getElementById('edit-name').value  = u.name;
+    document.getElementById('edit-user').value  = u.username;
+    document.getElementById('edit-pass').value  = u.password;
+    document.getElementById('edit-role').value  = u.role;
+    const btn = document.getElementById('toggle-btn');
+    if (u.active) { btn.textContent = '⛔ إيقاف الحساب'; btn.style.background = 'linear-gradient(135deg,#be185d,#ec4899)'; }
+    else          { btn.textContent = '✅ تفعيل الحساب';  btn.style.background = 'linear-gradient(135deg,#065f46,#10b981)'; }
+    document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeModal() {
+    document.getElementById('edit-modal').classList.remove('open');
+}
+
+function saveEdit() {
+    const idx  = parseInt(document.getElementById('edit-idx').value);
+    const users = getUsers();
+    users[idx].name     = document.getElementById('edit-name').value.trim() || users[idx].name;
+    users[idx].username = document.getElementById('edit-user').value.trim() || users[idx].username;
+    users[idx].password = document.getElementById('edit-pass').value.trim() || users[idx].password;
+    saveUsers(users);
+    closeModal();
+    renderTable();
+    showToast('💾 تم حفظ التعديلات');
+}
+
+
+/* ═══════════════════════════════════
+   CHANGE ADMIN PASSWORD
+═══════════════════════════════════ */
+function changeAdminPw() {
+    const np = document.getElementById('new-admin-pw').value.trim();
+    const cp = document.getElementById('confirm-admin-pw').value.trim();
+    if (!np) { showToast('❗ اكتب كلمة المرور الجديدة'); return; }
+    if (np !== cp) { showToast('❌ كلمتا المرور مش متطابقتين'); return; }
+    localStorage.setItem(ADMIN_PW_KEY, np);
+    document.getElementById('new-admin-pw').value = '';
+    document.getElementById('confirm-admin-pw').value = '';
+    showToast('🔑 تم تغيير كلمة مرور الدخول بنجاح!');
+}
+
+/* ═══════════════════════════════════
+   TOAST
+═══════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ═══════════════════════════════════
+   DARK MODE
+═══════════════════════════════════ */
+function initTheme() {
+    if (localStorage.getItem('theme') === 'dark') html.classList.add('dark');
+}
+function toggleTheme() {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+}
+// Apply on load
+(function(){ if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark'); })();
+
+/* ═══════════════════════════════════
+   BACKGROUND PARTICLES (login)
+═══════════════════════════════════ */
+(function(){
+    const cont = document.getElementById('bg-particles');
+    for (let i = 0; i < 18; i++) {
+        const el = document.createElement('div');
+        el.className = 'bg-particle';
+        const size = 30 + Math.random() * 100;
+        el.style.cssText = `
+            width:${size}px; height:${size}px;
+            left:${Math.random()*100}%;
+            animation-duration:${6 + Math.random()*8}s;
+            animation-delay:${Math.random()*8}s;
+        `;
+        cont.appendChild(el);
+    }
+})();
+
+/* close modal clicking outside */
+document.getElementById('edit-modal').addEventListener('click', function(e){
+    if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>

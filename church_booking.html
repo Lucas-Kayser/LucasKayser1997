@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ نظام حجز الفصول – كنيسة الملاك ميخائيل عزبة النخل بالأندلس</title>
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/NgKMPBgm/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>window.scrollTo(0,0); history.scrollRestoration='manual';</script>
+    <style>
+        :root {
+            --bg-body: #f3f4f6;
+            --bg-card: rgba(255,255,255,0.92);
+            --card-border: rgba(255,255,255,0.7);
+            --text-main: #1f2937;
+            --text-sub: #4b5563;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --title-select: #4b5563;
+        }
+        html.dark {
+            --bg-body: #080c14;
+            --bg-card: rgba(17,24,39,0.88);
+            --card-border: rgba(255,255,255,0.06);
+            --text-main: #f9fafb;
+            --text-sub: #9ca3af;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --title-select: #9ca3af;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { overflow-x: hidden; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-body);
+            min-height: 100vh;
+            color: var(--text-main);
+            transition: background 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+        }
+
+        /* ───────── LOGIN NAV BUTTONS ───────── */
+        .login-nav {
+            position: absolute; top: 20px; right: 20px;
+            display: flex; gap: 8px; align-items: center; z-index: 10;
+            flex-wrap: wrap; justify-content: flex-end;
+        }
+        .login-nav-btn {
+            background: rgba(255,255,255,0.18);
+            color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            border-radius: 25px; padding: 7px 15px;
+            font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; font-family: 'Tajawal', sans-serif;
+            text-decoration: none;
+            display: inline-flex; align-items: center; gap: 5px;
+            transition: background 0.2s, transform 0.15s;
+            white-space: nowrap;
+        }
+        .login-nav-btn:hover { background: rgba(255,255,255,0.32); transform: scale(1.04); }
+        .login-nav-btn:active { transform: scale(0.97); }
+
+        /* dark toggle in login */
+        .login-dark-toggle {
+            width: 70px; height: 34px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px; border: 1.5px solid rgba(255,255,255,0.4);
+            position: relative; cursor: pointer;
+            display: flex; align-items: center;
+            justify-content: space-between; padding: 0 7px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s;
+        }
+        .login-dark-toggle .sw-icon { font-size: 0.9rem; user-select: none; }
+        .login-dark-toggle .sw-handle {
+            position: absolute; top: 3px; right: 3px;
+            width: 25px; height: 25px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        html.dark .login-dark-toggle .sw-handle { transform: translateX(-36px); background: #38bdf8; }
+
+        /* ───────── LOGIN ───────── */
+        #login-page {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c084fc 100%);
+            position: relative; overflow: hidden;
+        }
+        #login-page::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 60%);
+        }
+        .login-card {
+            background: rgba(255,255,255,0.13);
+            backdrop-filter: blur(22px);
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 30px;
+            padding: 2.6rem 2.2rem;
+            width: 370px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+            position: relative; z-index: 1;
+            text-align: center;
+        }
+        .login-logo {
+            width: 88px; height: 88px; border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.5);
+            display: block; margin: 0 auto 1.2rem;
+            object-fit: cover;
+            box-shadow: 0 0 30px rgba(255,255,255,0.18);
+        }
+        .login-card h1 { color: #fff; font-size: 1.55rem; font-weight: 900; margin-bottom: 4px; }
+        .login-card .subtitle { color: rgba(255,255,255,0.72); font-size: 0.9rem; margin-bottom: 1.8rem; }
+        .form-group { margin-bottom: 1rem; text-align: right; }
+        .form-group label { display: block; color: rgba(255,255,255,0.85); font-size: 0.84rem; font-weight: 700; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px 15px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 14px; color: #fff;
+            font-size: 0.95rem; font-family: 'Tajawal', sans-serif;
+            transition: border 0.2s, background 0.2s; direction: rtl;
+        }
+        .form-group input::placeholder { color: rgba(255,255,255,0.48); }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.22);
+        }
+        .btn-primary {
+            width: 100%; padding: 13px;
+            background: rgba(255,255,255,0.22);
+            border: 1.5px solid rgba(255,255,255,0.5);
+            border-radius: 30px; color: #fff;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer; font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s; margin-top: 0.5rem;
+        }
+        .btn-primary:hover { background: rgba(255,255,255,0.34); transform: scale(1.02); }
+        .btn-primary:active { transform: scale(0.98); }
+        .login-note { text-align: center; color: rgba(255,255,255,0.5); font-size: 0.78rem; margin-top: 1.2rem; }
+        .error-msg {
+            background: rgba(239,68,68,0.28); border: 1px solid rgba(239,68,68,0.5);
+            color: #fca5a5; border-radius: 12px; padding: 10px 14px;
+            font-size: 0.85rem; margin-bottom: 1rem; display: none; text-align: center;
+        }
+
+        /* ───────── BOOKING PAGE ───────── */
+        #booking-page { display: none; min-height: 100vh; background: var(--bg-body); }
+
+        /* Hero header – same as index.html */
+        .hero-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c084fc 100%);
+            text-align: center;
+            padding: 48px 20px 90px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            position: relative; overflow: hidden;
+        }
+        .header-controls {
+            position: absolute; top: 18px; right: 18px;
+            display: flex; gap: 8px; align-items: center; z-index: 10;
+            flex-wrap: wrap; justify-content: flex-end;
+            max-width: calc(100% - 36px);
+        }
+        .hbtn {
+            background: rgba(255,255,255,0.18); color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            border-radius: 25px; padding: 7px 14px;
+            font-size: 0.8rem; font-weight: 700;
+            cursor: pointer; font-family: 'Tajawal', sans-serif;
+            text-decoration: none; transition: background 0.2s, transform 0.15s;
+            display: inline-flex; align-items: center; gap: 5px;
+            white-space: nowrap;
+        }
+        .hbtn:hover { background: rgba(255,255,255,0.3); transform: scale(1.04); }
+        .hbtn:active { transform: scale(0.97); }
+
+        /* Dark mode toggle – exact copy from index.html */
+        .theme-toggle-switch {
+            width: 76px; height: 36px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px; border: 1.5px solid rgba(255,255,255,0.4);
+            position: relative; cursor: pointer;
+            display: flex; align-items: center;
+            justify-content: space-between; padding: 0 8px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .theme-toggle-switch .switch-icon { font-size: 1rem; user-select: none; }
+        .theme-toggle-switch .switch-handle {
+            position: absolute; top: 3px; right: 3px;
+            width: 27px; height: 27px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        html.dark .theme-toggle-switch { background: rgba(17,24,39,0.6); }
+        html.dark .theme-toggle-switch .switch-handle { transform: translateX(-40px); background: #38bdf8; }
+
+        .hero-logo {
+            width: 90px; height: 90px; border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.5);
+            object-fit: cover; margin-bottom: 14px;
+            box-shadow: 0 0 24px rgba(255,255,255,0.18);
+        }
+        .hero-header h1 { color: #fff; font-size: 1.75rem; font-weight: 900; margin-bottom: 5px; }
+        .hero-header .hero-sub { color: rgba(255,255,255,0.78); font-size: 0.92rem; margin-bottom: 0; }
+        .welcome-badge {
+            display: inline-block; margin-top: 12px;
+            background: rgba(255,255,255,0.18); color: #fff;
+            padding: 5px 20px; border-radius: 25px;
+            font-size: 0.84rem; font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        /* Section label – floats over header curve */
+        .section-title {
+            text-align: center;
+            margin: -38px auto 28px;
+            font-size: 1.1rem; font-weight: 700;
+            color: var(--title-select);
+            position: relative; z-index: 5;
+            background: var(--bg-body); padding: 6px 20px;
+            display: inline-block;
+            left: 50%; transform: translateX(-50%);
+            border-radius: 30px;
+        }
+
+        /* Main container */
+        .page-body {
+            max-width: 860px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+            position: relative; z-index: 2;
+        }
+
+        /* Cards – same as index.html church-card style */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 28px; overflow: hidden;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--card-border);
+            margin-bottom: 24px;
+            transition: transform 0.3s cubic-bezier(0.25,1,0.5,1), box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(99,102,241,0.13);
+        }
+        html.dark .card:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(124,58,237,0.18);
+        }
+
+        /* Card colour headers */
+        .card-title {
+            padding: 20px 24px; color: #fff;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.05rem; font-weight: 700;
+        }
+        .card-title .ico { font-size: 1.4rem; }
+        .card-purple .card-title { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+        .card-blue   .card-title { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); }
+        .card-rose   .card-title { background: linear-gradient(135deg, #be185d 0%, #ec4899 100%); }
+        .card-green  .card-title { background: linear-gradient(135deg, #065f46 0%, #10b981 100%); }
+
+        /* Card body */
+        .card-body { padding: 22px 24px; }
+
+        /* Grid */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media(max-width:560px){ .grid-2 { grid-template-columns: 1fr; } }
+
+        /* Fields */
+        .form-group-inner { margin-bottom: 14px; }
+        .form-group-inner:last-child { margin-bottom: 0; }
+        .form-group-inner label {
+            display: block; font-size: 0.84rem; font-weight: 700;
+            color: var(--text-sub); margin-bottom: 7px;
+        }
+        .form-group-inner input,
+        .form-group-inner select,
+        .form-group-inner textarea {
+            width: 100%; padding: 12px 14px;
+            background: var(--bg-body);
+            border: 1.5px solid rgba(109,40,217,0.14);
+            border-radius: 14px; color: var(--text-main);
+            font-size: 0.95rem; font-family: 'Tajawal', sans-serif;
+            transition: border 0.2s, box-shadow 0.2s; direction: rtl;
+        }
+        .form-group-inner input:focus,
+        .form-group-inner select:focus,
+        .form-group-inner textarea:focus {
+            outline: none; border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.11);
+        }
+        html.dark .form-group-inner input,
+        html.dark .form-group-inner select,
+        html.dark .form-group-inner textarea {
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.11);
+        }
+        .form-group-inner select option { background: #fff; color: #1f2937; }
+        html.dark .form-group-inner select option { background: #1f2937; color: #f9fafb; }
+        .form-group-inner textarea { resize: vertical; min-height: 82px; }
+
+        /* Buttons */
+        .btn-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+        .btn-submit {
+            flex: 1; padding: 13px 20px;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            color: #fff; border: none; border-radius: 30px;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer; font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 8px 22px rgba(99,102,241,0.35); }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-reset {
+            padding: 13px 20px;
+            background: transparent; color: var(--text-sub);
+            border: 1.5px solid rgba(109,40,217,0.2);
+            border-radius: 30px; font-size: 0.95rem;
+            font-weight: 700; cursor: pointer;
+            font-family: 'Tajawal', sans-serif; transition: background 0.2s;
+        }
+        .btn-reset:hover { background: rgba(109,40,217,0.06); }
+
+        /* Success banner */
+        .success-msg {
+            display: none;
+            background: linear-gradient(135deg, #065f46, #10b981);
+            color: #fff; border-radius: 20px;
+            padding: 22px 26px; margin: 18px 0;
+            text-align: center; animation: fadeIn 0.5s;
+        }
+        .success-msg .icon { font-size: 2.2rem; margin-bottom: 8px; }
+        .success-msg h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+        .success-msg p { font-size: 0.87rem; opacity: 0.85; }
+        @keyframes fadeIn { from{opacity:0;transform:scale(0.94)} to{opacity:1;transform:scale(1)} }
+
+        /* Reservations */
+        .reservations-list { margin-top: 10px; }
+        .res-list-title {
+            font-size: 1.05rem; font-weight: 700;
+            margin: 24px 0 14px; color: var(--text-main);
+        }
+        .reservation-item {
+            background: var(--bg-card);
+            border-radius: 18px; padding: 16px 20px;
+            margin-bottom: 10px; border: 1px solid var(--card-border);
+            box-shadow: var(--card-shadow);
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; flex-wrap: wrap;
+            border-right: 4px solid #7c3aed;
+            transition: transform 0.2s;
+        }
+        .reservation-item:hover { transform: scale(1.01); }
+        .res-info .res-title-item {
+            font-size: 0.94rem; font-weight: 700;
+            color: var(--text-main); margin-bottom: 4px;
+        }
+        .res-info .res-details { font-size: 0.8rem; color: var(--text-sub); }
+        .res-badge {
+            background: linear-gradient(90deg, rgba(99,102,241,0.12), rgba(168,85,247,0.12));
+            color: #7c3aed; padding: 4px 14px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700; white-space: nowrap;
+        }
+        html.dark .res-badge { background: rgba(99,102,241,0.2); color: #c4b5fd; }
+        .empty-state {
+            text-align: center; padding: 28px;
+            color: var(--text-sub); font-size: 0.9rem;
+        }
+
+        /* Ripple */
+        .card { position: relative; overflow: hidden; }
+        .ripple {
+            position: absolute; border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            transform: scale(0);
+            animation: rippleAnim 0.7s linear;
+            pointer-events: none; z-index: 9999;
+        }
+        @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════ LOGIN ═══════════ -->
+<div id="login-page">
+
+    <!-- أزرار التنقل فوق -->
+    <div class="login-nav">
+        <div class="login-dark-toggle" onclick="toggleDark()" title="تبديل المظهر">
+            <span class="sw-icon">☀️</span>
+            <span class="sw-icon">🌙</span>
+            <div class="sw-handle"></div>
+        </div>
+        <a href="index.html" class="login-nav-btn">🏠 الرئيسية</a>
+        <a href="church_booking.html" class="login-nav-btn">📅 الحجوزات</a>
+        <a href="Control-panel.html" class="login-nav-btn">⚙️ الإدارة</a>
+    </div>
+
+    <div class="login-card">
+        <img src="https://i.ibb.co/NgKMPBgm/logo.jpg" alt="شعار" class="login-logo">
+        <h1>نظام حجز الفصول</h1>
+        <p class="subtitle">كنيسة الملاك ميخائيل عزبة النخل بالأندلس</p>
+        <div class="error-msg" id="error-msg">❌ اسم المستخدم أو كلمة المرور غير صحيحة</div>
+        <div class="form-group">
+            <label>اسم المستخدم</label>
+            <input type="text" id="username" placeholder="أدخل اسم المستخدم" autocomplete="username">
+        </div>
+        <div class="form-group">
+            <label>كلمة المرور</label>
+            <input type="password" id="password" placeholder="أدخل كلمة المرور" autocomplete="current-password">
+        </div>
+        <button class="btn-primary" onclick="doLogin()">🔐 دخول</button>
+        <p class="login-note">تواصل مع المسؤول للحصول على بيانات دخولك</p>
+    </div>
+</div>
+
+<!-- ═══════════ BOOKING PAGE ═══════════ -->
+<div id="booking-page">
+
+    <!-- Hero header -->
+    <div class="hero-header">
+        <div class="header-controls">
+            <!-- Dark mode toggle -->
+            <div class="theme-toggle-switch" onclick="toggleDark()" title="تبديل المظهر">
+                <span class="switch-icon">☀️</span>
+                <span class="switch-icon">🌙</span>
+                <div class="switch-handle"></div>
+            </div>
+            <a href="index.html" class="hbtn">🏠 الرئيسية</a>
+            <a href="Control-panel.html" class="hbtn">⚙️ الإدارة</a>
+            <button class="hbtn" onclick="doLogout()" style="background:rgba(239,68,68,0.25);border-color:rgba(239,68,68,0.5);">🚪 خروج</button>
+        </div>
+        <img src="https://i.ibb.co/NgKMPBgm/logo.jpg" alt="شعار" class="hero-logo">
+        <h1>⛪ نظام حجز الفصول</h1>
+        <p class="hero-sub">اختر الفصل والموعد المناسب واملأ تفاصيل الاجتماع</p>
+        <span class="welcome-badge" id="logged-user">مرحباً، خادم</span>
+    </div>
+
+    <div class="page-body">
+        <p class="section-title">اختر الفصل وسجّل الموعد</p>
+
+        <!-- Card 1: Room & Date -->
+        <div class="card card-purple">
+            <div class="card-title"><span class="ico">📅</span> بيانات الحجز</div>
+            <div class="card-body">
+                <div class="grid-2">
+                    <div class="form-group-inner">
+                        <label>الفصل / القاعة</label>
+                        <select id="room">
+                            <option value="" disabled selected>⏳ جاري تحميل القاعات…</option>
+                        </select>
+                        <div id="room-load-status" style="font-size:0.75rem;color:var(--text-sub);margin-top:5px;text-align:center;"></div>
+                    </div>
+                    <div class="form-group-inner">
+                        <label>التاريخ</label>
+                        <input type="date" id="date">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group-inner">
+                        <label>⏰ من الساعة</label>
+                        <input type="time" id="time-from" value="10:00">
+                    </div>
+                    <div class="form-group-inner">
+                        <label>⏰ إلى الساعة</label>
+                        <input type="time" id="time-to" value="12:00">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Purpose -->
+        <div class="card card-rose">
+            <div class="card-title"><span class="ico">📋</span> تفاصيل الاجتماع</div>
+            <div class="card-body">
+                <div class="form-group-inner">
+                    <label>الغرض من الحجز</label>
+                    <select id="purpose" onchange="toggleCustom(this)">
+                        <option value="" disabled selected>اختر الغرض…</option>
+                        <option value="اجتماع التربية الكنسية">اجتماع التربية الكنسية</option>
+                        <option value="تحضير للتربية الكنسية">تحضير للتربية الكنسية</option>
+                        <option value="تحضير للمؤتمر">تحضير للمؤتمر</option>
+                        <option value="اجتماع تدريب الخدام">اجتماع تدريب الخدام</option>
+                        <option value="خدمة اجتماع أسبوعية">خدمة اجتماع أسبوعية</option>
+                        <option value="اجتماع لجنة">اجتماع لجنة</option>
+                        <option value="تسبيح وعبادة">تسبيح وعبادة</option>
+                        <option value="other">غرض آخر (اكتب)</option>
+                    </select>
+                </div>
+                <div class="form-group-inner" id="custom-group" style="display:none">
+                    <label>اكتب الغرض بالتفصيل</label>
+                    <input type="text" id="custom-purpose" placeholder="مثال: اجتماع لجنة التربية لسنة ٢٠٢٥">
+                </div>
+                <div class="form-group-inner">
+                    <label>📝 ملاحظات إضافية (اختياري)</label>
+                    <textarea id="notes" placeholder="أي تفاصيل أو احتياجات خاصة… مثلاً: نحتاج بروجيكتور، أو: اجتماع سنة البنيان"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Responsible -->
+        <div class="card card-blue">
+            <div class="card-title"><span class="ico">👤</span> بيانات المسؤول</div>
+            <div class="card-body">
+                <div class="form-group-inner">
+                    <label>اسم المسؤول</label>
+                    <input type="text" id="responsible" placeholder="اسمك كاملاً">
+                </div>
+            </div>
+        </div>
+
+        <!-- تحذير تعارض -->
+        <div id="conflict-warning" style="display:none;background:linear-gradient(135deg,#be185d,#ef4444);color:#fff;border-radius:20px;padding:18px 22px;margin-bottom:18px;text-align:center;animation:fadeIn 0.4s;">
+            <div style="font-size:1.6rem;margin-bottom:6px;">⚠️</div>
+            <div style="font-weight:800;font-size:1rem;margin-bottom:4px;">تعارض في الحجز!</div>
+            <div id="conflict-details" style="font-size:0.87rem;opacity:0.9;"></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="btn-actions">
+            <button class="btn-submit" onclick="submitBooking()">✅ تأكيد الحجز</button>
+            <button class="btn-reset" onclick="resetForm()">مسح البيانات</button>
+        </div>
+
+        <!-- Success -->
+        <div class="success-msg" id="success-msg">
+            <div class="icon">🎉</div>
+            <h3>تم تسجيل الحجز بنجاح!</h3>
+            <p id="success-details"></p>
+        </div>
+
+        <!-- Reservations list -->
+        <div class="reservations-list">
+            <p class="res-list-title">📌 الحجوزات المسجلة</p>
+            <div id="res-list"><div class="empty-state">لا توجد حجوزات بعد</div></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ═══════════ USERS – مربوط بالكنترول بانل ═══════════
+// المستخدمين بييجوا من localStorage بتاع Control-panel.html
+
+const FALLBACK_USERS = [
+    { name: 'المسؤول',      username: 'admin',    password: 'church2025',   role: 'مشرف',     active: true },
+    { name: 'معلمة مريم',   username: 'teacher1', password: 'teacher1pass', role: 'خادم',     active: true },
+    { name: 'الأخ بطرس',    username: 'teacher2', password: 'teacher2pass', role: 'خادم',     active: true },
+    { name: 'الشماس يوسف',  username: 'deacon1',  password: 'deacon2025',   role: 'مدير حجز', active: true },
+];
+
+function getAllUsers() {
+    try {
+        const saved = localStorage.getItem('ctrl_users');
+        return saved ? JSON.parse(saved) : FALLBACK_USERS;
+    } catch(e) { return FALLBACK_USERS; }
+}
+
+let reservations = [];
+let currentUser  = '';
+
+// ─── حفظ وتحميل الحجوزات من localStorage ───
+const RES_KEY = 'church_bookings';
+
+function loadReservations() {
+    try {
+        const raw = localStorage.getItem(RES_KEY);
+        reservations = raw ? JSON.parse(raw) : [];
+    } catch(e) { reservations = []; }
+}
+
+function saveReservations() {
+    localStorage.setItem(RES_KEY, JSON.stringify(reservations));
+}
+
+// ─── Dark mode ───
+function toggleDark() {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('dark', document.documentElement.classList.contains('dark') ? '1' : '0');
+}
+if (localStorage.getItem('dark') === '1') document.documentElement.classList.add('dark');
+
+// ─── Login ───
+function doLogin() {
+    const u   = document.getElementById('username').value.trim();
+    const p   = document.getElementById('password').value.trim();
+    const err = document.getElementById('error-msg');
+
+    const users   = getAllUsers();
+    const account = users.find(usr => usr.username === u && usr.password === p);
+
+    if (account && account.active === false) {
+        err.textContent = '⛔ هذا الحساب متوقف مؤقتاً، تواصل مع المسؤول';
+        err.style.display = 'block';
+        document.getElementById('password').value = '';
+        return;
+    }
+
+    if (account) {
+        currentUser = account.name;
+        err.style.display = 'none';
+        document.getElementById('login-page').style.display    = 'none';
+        document.getElementById('booking-page').style.display  = 'block';
+        document.getElementById('logged-user').textContent     = 'مرحباً، ' + currentUser;
+        document.getElementById('responsible').value           = currentUser;
+        setTodayDate();
+        loadReservations();
+        renderList();
+    } else {
+        err.textContent = '❌ اسم المستخدم أو كلمة المرور غير صحيحة';
+        err.style.display = 'block';
+        document.getElementById('password').value = '';
+    }
+}
+
+function doLogout() {
+    document.getElementById('login-page').style.display   = 'flex';
+    document.getElementById('booking-page').style.display = 'none';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('error-msg').style.display = 'none';
+}
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('login-page').style.display !== 'none') doLogin();
+});
+
+function setTodayDate() {
+    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+}
+
+function toggleCustom(sel) {
+    document.getElementById('custom-group').style.display = sel.value === 'other' ? 'block' : 'none';
+}
+
+// ─── فحص تعارض الحجوزات ───
+function timeToMin(t) {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+}
+
+function checkConflict(room, date, timeFrom, timeTo, excludeIdx = -1) {
+    const from = timeToMin(timeFrom);
+    const to   = timeToMin(timeTo);
+    for (let i = 0; i < reservations.length; i++) {
+        if (i === excludeIdx) continue;
+        const r = reservations[i];
+        if (r.room !== room || r.date !== date) continue;
+        const rFrom = timeToMin(r.timeFrom);
+        const rTo   = timeToMin(r.timeTo);
+        // تعارض لو الفترتين بتتداخلوا
+        if (from < rTo && to > rFrom) {
+            return r; // يرجع الحجز المتعارض
+        }
+    }
+    return null;
+}
+
+// ─── فحص الجدول من Google Sheet ───
+const SHEET_ID_BOOKING = '1n0CKrcqqhe7JHoKYL-snC3CNmKeVOA5OaFe_t_4az1c';
+const SHEET_DAYS = [
+    { dayIndex: 0, gid: '1037475505' }, // الأحد
+    { dayIndex: 1, gid: '315975640'  }, // الاثنين
+    { dayIndex: 2, gid: '264217626'  }, // الثلاثاء
+    { dayIndex: 3, gid: '998301898'  }, // الأربعاء
+    { dayIndex: 4, gid: '675121436'  }, // الخميس
+    { dayIndex: 5, gid: '1390365265' }, // الجمعة
+    { dayIndex: 6, gid: '217516168'  }, // السبت
+];
+// 14 عمود — كل عمود = ساعة — من 9ص لـ10م
+const BOOKING_TIME_LABELS = [
+    '9:00','10:00','11:00','12:00','13:00','14:00',
+    '15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00'
+];
+const BOOKING_COL_START = 2;
+const BOOKING_COL_END   = 14;
+
+// تحويل وقت 24 ساعة لـ 12 ساعة مع ص/م
+function to12h(t) {
+    if (!t) return t;
+    const [h, m] = t.split(':').map(Number);
+    const suffix = h < 12 ? 'ص' : h === 12 ? 'ظ' : 'م';
+    const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    return `${h12}:${String(m).padStart(2,'0')} ${suffix}`;
+}
+
+async function checkSheetConflict(room, dateStr, timeFrom, timeTo) {
+    // نحدد اليوم من التاريخ
+    const d = new Date(dateStr);
+    const dayIndex = d.getDay(); // 0=أحد
+    const dayObj = SHEET_DAYS.find(x => x.dayIndex === dayIndex);
+    if (!dayObj) return null;
+
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID_BOOKING}/gviz/tq?tqx=out:json&gid=${dayObj.gid}&headers=1`;
+    let table;
+    try {
+        const text = await fetch(url).then(r => r.text());
+        table = JSON.parse(text.substring(47).slice(0, -2)).table;
+    } catch(e) {
+        return null; // لو فشل الاتصال نكمل ونسمح بالحجز
+    }
+
+    const fromMin = timeToMin(timeFrom);
+    const toMin   = timeToMin(timeTo);
+
+    for (const row of (table.rows || [])) {
+        const cells = row.c || [];
+        const roomCell = cells[1] ? String(cells[1].v || '').trim() : '';
+        if (!roomCell) continue;
+
+        // مقارنة مرنة: نشيل المسافات والأحرف الخاصة
+        const normalize = s => s.replace(/\s+/g,'').replace(/[|｜]/g,'').toLowerCase();
+        if (normalize(roomCell) !== normalize(room)) continue;
+
+        // فحص كل خلية وقت
+        for (let ci = BOOKING_COL_START; ci <= Math.min(BOOKING_COL_END, cells.length - 1); ci++) {
+            const val = cells[ci] ? String(cells[ci].v || '').trim() : '';
+            if (!val) continue;
+
+            // وقت بداية هذه الخلية ووقت نهايتها
+            const slotStart = BOOKING_TIME_LABELS[ci - BOOKING_COL_START];
+            const slotEnd   = BOOKING_TIME_LABELS[ci - BOOKING_COL_START + 1];
+            if (!slotStart) continue;
+
+            const slotStartMin = timeToMin(slotStart);
+            const slotEndMin   = slotEnd ? timeToMin(slotEnd) : slotStartMin + 60;
+
+            // تعارض؟
+            if (fromMin < slotEndMin && toMin > slotStartMin) {
+                return { activity: val, slotStart, slotEnd: slotEnd || '' };
+            }
+        }
+    }
+    return null;
+}
+
+// ─── Submit ───
+async function submitBooking() {
+    const room      = document.getElementById('room').value;
+    const date      = document.getElementById('date').value;
+    const timeFrom  = document.getElementById('time-from').value;
+    const timeTo    = document.getElementById('time-to').value;
+    const purposeSel = document.getElementById('purpose').value;
+    const customPurp = document.getElementById('custom-purpose').value.trim();
+    const notes     = document.getElementById('notes').value.trim();
+    const resp      = document.getElementById('responsible').value.trim();
+
+    const purpose = purposeSel === 'other' ? customPurp : purposeSel;
+    const conflictWarn = document.getElementById('conflict-warning');
+    conflictWarn.style.display = 'none';
+
+    if (!room || !date || !timeFrom || !timeTo || !purpose || !resp) {
+        alert('⚠️ من فضلك اكمل البيانات المطلوبة');
+        return;
+    }
+    if (timeTo <= timeFrom) {
+        alert('⚠️ وقت الانتهاء يجب أن يكون بعد وقت البداية');
+        return;
+    }
+
+    // ─── 1) فحص التعارض مع حجوزات سابقة ───
+    const conflict = checkConflict(room, date, timeFrom, timeTo);
+    if (conflict) {
+        document.getElementById('conflict-details').textContent =
+            `"${room}" محجوزة بالفعل في ${formatDate(date)} من ${to12h(conflict.timeFrom)} إلى ${to12h(conflict.timeTo)} بواسطة ${conflict.resp} — اختر وقتاً آخر`;
+        conflictWarn.style.display = 'block';
+        conflictWarn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    // ─── 2) فحص جدول الخدمات من Google Sheet ───
+    const submitBtn = document.querySelector('button[onclick="submitBooking()"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳ جاري التحقق من الجدول...'; }
+
+    const sheetConflict = await checkSheetConflict(room, date, timeFrom, timeTo);
+
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '✅ تأكيد الحجز'; }
+
+    if (sheetConflict) {
+        document.getElementById('conflict-details').textContent =
+            `⛔ "${room}" مشغولة بخدمة "${sheetConflict.activity}"` +
+            (sheetConflict.slotStart ? ` من ${to12h(sheetConflict.slotStart)} إلى ${to12h(sheetConflict.slotEnd)}` : '') +
+            ` — اختر وقتاً آخر أو قاعة أخرى`;
+        conflictWarn.style.display = 'block';
+        conflictWarn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    // ─── 3) تسجيل الحجز ───
+    const booking = { room, date, timeFrom, timeTo, purpose, notes, resp, id: Date.now() };
+    reservations.unshift(booking);
+    saveReservations();
+
+    document.getElementById('success-details').textContent =
+        `${room} | ${formatDate(date)} | ${to12h(timeFrom)} – ${to12h(timeTo)} | ${purpose}`;
+    document.getElementById('success-msg').style.display = 'block';
+    document.getElementById('success-msg').scrollIntoView({ behavior: 'smooth' });
+
+    renderList();
+    resetForm();
+}
+
+function formatDate(d) {
+    if (!d) return '';
+    const [y, m, day] = d.split('-');
+    const months = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    return `${day} ${months[parseInt(m)]} ${y}`;
+}
+
+function resetForm() {
+    document.getElementById('room').selectedIndex    = 0;
+    document.getElementById('date').value            = new Date().toISOString().split('T')[0];
+    document.getElementById('time-from').value       = '10:00';
+    document.getElementById('time-to').value         = '12:00';
+    document.getElementById('purpose').selectedIndex = 0;
+    document.getElementById('custom-group').style.display = 'none';
+    document.getElementById('custom-purpose').value  = '';
+    document.getElementById('notes').value           = '';
+    document.getElementById('responsible').value     = currentUser;
+    document.getElementById('conflict-warning').style.display = 'none';
+}
+
+function renderList() {
+    const el = document.getElementById('res-list');
+    if (reservations.length === 0) {
+        el.innerHTML = '<div class="empty-state">لا توجد حجوزات بعد</div>';
+        return;
+    }
+    el.innerHTML = reservations.map((r, i) => `
+        <div class="reservation-item">
+            <div class="res-info">
+                <div class="res-title-item">🏛️ ${r.room}</div>
+                <div class="res-details">
+                    📅 ${formatDate(r.date)} &nbsp;|&nbsp;
+                    ⏰ ${to12h(r.timeFrom)} – ${to12h(r.timeTo)} &nbsp;|&nbsp;
+                    👤 ${r.resp}
+                    ${r.notes ? '<br>📝 ' + r.notes : ''}
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+                <span class="res-badge">${r.purpose}</span>
+                <button onclick="deleteRes(${i})" style="
+                    background:linear-gradient(135deg,#be185d,#ef4444);
+                    color:#fff;border:none;border-radius:12px;
+                    padding:5px 14px;font-size:0.78rem;font-weight:700;
+                    cursor:pointer;font-family:'Tajawal',sans-serif;
+                    transition:transform 0.15s;
+                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    🗑️ مسح الحجز
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function deleteRes(i) {
+    if (confirm('متأكد إنك عايز تمسح الحجز ده؟')) {
+        reservations.splice(i, 1);
+        saveReservations();
+        renderList();
+    }
+}
+
+// ─── Ripple effect on cards ───
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.card').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'SELECT' ||
+                e.target.tagName === 'INPUT'  || e.target.tagName === 'TEXTAREA') return;
+            var ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            var rect = card.getBoundingClientRect();
+            var size = Math.max(rect.width, rect.height);
+            ripple.style.width  = ripple.style.height = size + 'px';
+            ripple.style.left   = (e.clientX - rect.left - size / 2) + 'px';
+            ripple.style.top    = (e.clientY - rect.top  - size / 2) + 'px';
+            card.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 700);
+        });
+    });
+});
+</script>
+
+<!-- ═══════════ تحميل القاعات من Google Sheet ═══════════ -->
+<script>
+(function() {
+    const SHEET_ID = '1n0CKrcqqhe7JHoKYL-snC3CNmKeVOA5OaFe_t_4az1c';
+    // نجيب بيانات من أول يوم (الأحد) — القاعات ثابتة في كل الأيام
+    const DAYS = [
+        { gid: '1037475505', label: 'الأحد' },
+        { gid: '315975640',  label: 'الاثنين' },
+        { gid: '264217626',  label: 'الثلاثاء' },
+        { gid: '998301898',  label: 'الأربعاء' },
+        { gid: '675121436',  label: 'الخميس' },
+        { gid: '1390365265', label: 'الجمعة' },
+        { gid: '217516168',  label: 'السبت' },
+    ];
+
+    async function fetchSheet(gid) {
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}&headers=1`;
+        const text = await fetch(url).then(r => r.text());
+        return JSON.parse(text.substring(47).slice(0, -2)).table;
+    }
+
+    function getCellValue(cell) {
+        if (!cell || cell.v === null || cell.v === undefined) return '';
+        return String(cell.v).trim();
+    }
+
+    async function loadRooms() {
+        const select = document.getElementById('room');
+        const status = document.getElementById('room-load-status');
+
+        try {
+            // نجيب من أول يوم متاح فيه بيانات
+            let table = null;
+            for (const day of DAYS) {
+                try {
+                    table = await fetchSheet(day.gid);
+                    if (table && table.rows && table.rows.length > 0) break;
+                } catch(e) {}
+            }
+
+            if (!table || !table.rows) throw new Error('No data');
+
+            // استخرج المناطق والقاعات
+            const zones = {}; // { zoneName: [roomName, ...] }
+            let currentZone = 'قاعات';
+
+            for (const row of table.rows) {
+                const cells = row.c || [];
+                const zoneCell = getCellValue(cells[0]);
+                const roomCell = getCellValue(cells[1]);
+
+                if (zoneCell) currentZone = zoneCell;
+                if (!roomCell) continue;
+
+                // تجاهل السطور اللي مش قاعات (مثلاً headers)
+                if (roomCell.length < 2) continue;
+
+                if (!zones[currentZone]) zones[currentZone] = [];
+                // تجنب التكرار
+                if (!zones[currentZone].includes(roomCell)) {
+                    zones[currentZone].push(roomCell);
+                }
+            }
+
+            // بناء الـ dropdown
+            select.innerHTML = '<option value="" disabled selected>اختر الفصل أو القاعة…</option>';
+
+            const zoneKeys = Object.keys(zones);
+            if (zoneKeys.length === 0) throw new Error('Empty');
+
+            for (const zone of zoneKeys) {
+                const rooms = zones[zone];
+                if (rooms.length === 0) continue;
+
+                const group = document.createElement('optgroup');
+                group.label = '📍 ' + zone;
+
+                for (const room of rooms) {
+                    const opt = document.createElement('option');
+                    opt.value = room;
+                    opt.textContent = room;
+                    group.appendChild(opt);
+                }
+                select.appendChild(group);
+            }
+
+            const totalRooms = zoneKeys.reduce((s, z) => s + zones[z].length, 0);
+            status.textContent = `✅ تم تحميل ${totalRooms} قاعة من ${zoneKeys.length} منطقة`;
+            setTimeout(() => status.textContent = '', 4000);
+
+        } catch(err) {
+            console.error('Sheet rooms error:', err);
+            // fallback لو فشل التحميل
+            select.innerHTML = `
+                <option value="" disabled selected>اختر الفصل أو القاعة…</option>
+                <optgroup label="📍 قاعات افتراضية">
+                    <option value="القاعة الكبرى">القاعة الكبرى</option>
+                    <option value="قاعة الاجتماعات">قاعة الاجتماعات</option>
+                    <option value="قاعة المؤتمرات">قاعة المؤتمرات</option>
+                    <option value="قاعة التدريب">قاعة التدريب</option>
+                </optgroup>`;
+            status.textContent = '⚠️ تعذر الاتصال بالشيت — تم تحميل القاعات الافتراضية';
+            status.style.color = '#ef4444';
+        }
+    }
+
+    // نحمّل القاعات بعد الدخول مباشرة
+    document.addEventListener('DOMContentLoaded', loadRooms);
+})();
+</script>
+</body>
+</html>
